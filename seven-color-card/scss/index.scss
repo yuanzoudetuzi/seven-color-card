@@ -1,0 +1,101 @@
+$unit-height: 3rem;
+$unit-width: 2.5rem;
+$colors:(
+        red:#dc143c,
+        orange: saturate(lighten(adjust_hue(red, 39), 5), 7),//#f37a16
+        yellow: saturate(lighten(adjust_hue(red, 64), 6), 13),//#fbdc14
+        green: desaturate(darken(adjust_hue(red, 102), 2), 11),//#73c620
+        blue: saturate(darken(adjust_hue(red, 201), 2), 1),//#12b7d4
+        purple: saturate(darken(adjust_hue(red, 296), 2), 1),//#a012d4
+        black:#777,
+        bgc: #fff
+);
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-size: 1.5vw;
+}
+
+body, ul, li {
+  margin: 0;
+  padding: 0
+}
+
+main {
+  /*  width: 21*$unit-width;*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  /*transform: translateY(-3*$unit-height);*/
+}
+
+.seven-card {
+  width: 21*$unit-width;
+}
+
+ul {
+  list-style: none;
+}
+
+.line {
+  display: flex;
+  flex-direction: row;
+}
+
+li {
+  height: $unit-height;
+  width: $unit-width;
+  display: inline-flex;
+}
+
+//declare macro of darken color
+@mixin darkenColor($color) {
+  @for $i from 1 through 10 {
+    $x: $i+11;
+    li:nth-child(#{$x}) {
+      $n: $i*5;
+      $bgcolor: darken($color, $n);
+      background-color: $bgcolor;
+      &:hover:before { //present the number of color when it's in hover
+        content: "#{$bgcolor}";
+        color: lighten($bgcolor, 40);
+        font-family: Verdana;
+        font-size: 8px;
+        padding: 2px;
+      }
+    }
+  }
+}
+
+//declare macro of lighten color
+@mixin lightenColor($color) {
+  @for $i from 1 through 10 {
+    li:nth-child(#{$i}) {
+      $x: 11-$i;
+      $n: $x*5;
+      $bgcolor: lighten($color, $n);
+      background-color: $bgcolor;
+      &:hover:before {
+        content: "#{$bgcolor}";
+        color: darken($bgcolor, 40);
+        font-family: Verdana;
+        font-size: .5rem;
+        padding: .1rem;
+
+      }
+    }
+  }
+}
+
+@each $colorName, $color in $colors {
+  .#{$colorName} {
+    li:nth-child(11) {
+      background-color: $color;
+    }
+    @include lightenColor($color);
+    @include darkenColor($color);
+  }
+}
